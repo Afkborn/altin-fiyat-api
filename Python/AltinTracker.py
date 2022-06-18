@@ -1,8 +1,9 @@
 from playwright.sync_api import sync_playwright
-from time import time
+from time import sleep, time
 
 from Python.globalVar import *
 from Python.Model.Altin import Altin
+from Python.Database import Database
 import json
 
 class AltinTracker:
@@ -11,11 +12,9 @@ class AltinTracker:
     last_get_time = 0
     
     def __init__(self) -> None:
-        pass
+        self.db = Database()
     
     def getDetailFromTitle(self, title:str):
-        #24 Ayar Saf Altın (saflık Derecesi 0.995) 1 GR
-        #22 Ayar Altın  (Saflık Derecesi 0.916)
         title = title.lower()
         if "ayar" in title:
             ayar = title[:2]
@@ -72,38 +71,50 @@ class AltinTracker:
             self.last_get_time = time()
             return self.altinList
     
-    def writeAltinJson(self,fileName:str) -> str:
-        if (len(self.altinList) == 0):
-            self.getAltinList()
-        jsonObject = {}
-        for altin in self.altinList:
-            jsonObject[altin.getDataFlag()] = {"altinAdi": altin.getAltinAdi(),
-                                               "aciklama": altin.getAciklama(),
-                                               "gramaj": altin.getGramaj(),
-                                               "saflik": altin.getSaflik(),
-                                               "ayar": altin.getAyar(),
-                                               "alisFiyati": altin.getAlisFiyati(),
-                                               "satisFiyati": altin.getSatisFiyati(),
-                                               "tarih": altin.getTarih()
-                                               }
-        with open(f"{fileName}.json", "w", encoding="utf8") as f:
-            json.dump(jsonObject, f, indent=4, ensure_ascii=False)
+    # def writeAltinJson(self,fileName:str) -> str:
+    #     jsonObject = {}
+    #     for altin in self.altinList:
+    #         jsonObject[altin.getDataFlag()] = {"altinAdi": altin.getAltinAdi(),
+    #                                            "aciklama": altin.getAciklama(),
+    #                                            "gramaj": altin.getGramaj(),
+    #                                            "saflik": altin.getSaflik(),
+    #                                            "ayar": altin.getAyar(),
+    #                                            "alisFiyati": altin.getAlisFiyati(),
+    #                                            "satisFiyati": altin.getSatisFiyati(),
+    #                                            "tarih": altin.getTarih()
+    #                                            }
+    #     with open(f"{fileName}.json", "w", encoding="utf8") as f:
+    #         json.dump(jsonObject, f, indent=4, ensure_ascii=False)
             
-    def getAltinJson(self):
-        if (len(self.altinList) == 0):
-            self.getAltinList()
-        if (self.last_get_time + 600 < time()):
-            self.getAltinList()
-        jsonObject = {}
-        for altin in self.altinList:
-            jsonObject[altin.getDataFlag()] = {
-                            "altinAdi": altin.getAltinAdi(),
-                            "aciklama": altin.getAciklama(),
-                            "gramaj": altin.getGramaj(),
-                            "saflik": altin.getSaflik(),
-                            "ayar": altin.getAyar(),
-                            "alisFiyati": altin.getAlisFiyati(),
-                            "satisFiyati": altin.getSatisFiyati(),
-                            "tarih": altin.getTarih()}
-        return jsonObject
-            
+    # def getAltinJson(self):
+    #     jsonObject = {}
+    #     for altin in self.altinList:
+    #         jsonObject[altin.getDataFlag()] = {
+    #                         "altinAdi": altin.getAltinAdi(),
+    #                         "aciklama": altin.getAciklama(),
+    #                         "gramaj": altin.getGramaj(),
+    #                         "saflik": altin.getSaflik(),
+    #                         "ayar": altin.getAyar(),
+    #                         "alisFiyati": altin.getAlisFiyati(),
+    #                         "satisFiyati": altin.getSatisFiyati(),
+    #                         "tarih": altin.getTarih()}
+    #     return jsonObject
+    
+    # def getTrackableAltin(self):
+    #     trackableAltin = []
+    #     butunAltinlar = self.db.getAltinlar()
+    #     for altin in butunAltinlar:
+    #         if (altin.getTarih() + 600 < time()):
+    #             trackableAltin.append(altin)
+    #     return trackableAltin
+    
+    def setTracker(self):
+        while True:
+            if (self.last_get_time + 600 < time()):
+                print(f"Altinların listesi yenileniyor...")
+                altinList = self.getAltinList()
+                for altin in altinList:
+                    altinID = self.db.addAltin(altin)
+                    if (altinID is not None):
+                        self.db.addFiyat(altinID, altin.getAlisFiyati(), altin.getSatisFiyati(), time()) 
+            sleep(10)

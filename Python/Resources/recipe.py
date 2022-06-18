@@ -2,20 +2,20 @@ from flask_restful import Resource
 from flask import request
 from http import HTTPStatus
 
-from ..AltinTracker import AltinTracker
+from ..Database import Database
 
 class AltinRecipe(Resource):
-    tracker = AltinTracker()
+    db = Database()
     def get(self):
-        
-        jsonAltinList = self.tracker.getAltinJson()
-            
-        if (len(jsonAltinList) == 0):
+        altinList = self.db.getAltinlar()
+        dictAltinList = []
+        for altin in altinList:
+            dictAltinList.append(dict(altin))
+        if (len(dictAltinList) == 0):
             return {
                 "status": HTTPStatus.NOT_FOUND,
                 'message': 'Altin bulunamadı'}
         
         return {
             "status": HTTPStatus.OK,
-            "update_time" : self.tracker.last_get_time,
-            'altinlar': jsonAltinList}
+            'altinlar': dictAltinList}
