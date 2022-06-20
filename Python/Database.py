@@ -1,6 +1,7 @@
 import sqlite3 as sql
 
 from Python.Model.Altin import Altin
+from Python.Model.HasAltin import HasAltin
 
 CREATE_TABLE_ALTIN = f"""CREATE TABLE IF NOT EXISTS altin (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -22,6 +23,26 @@ CREATE_TABLE_FIYAT = f"""CREATE TABLE IF NOT EXISTS fiyat (
     satisFiyati REAL,
     tarih REAL
     );"""
+    
+    
+CREATE_TABLE_HAS_ALTIN = f"""CREATE TABLE IF NOT EXISTS hasAltin (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    code TEXT,
+    alis REAL,
+    satis REAL,
+    tarih REAL
+    );
+    """
+    
+    
+CREATE_TABLE_HAS_ALTIN_FIYAT = f"""CREATE TABLE IF NOT EXISTS hasAltinFiyat (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    hasAltinID INTEGER,
+    alis REAL,
+    satis REAL,
+    tarih REAL
+    );
+    """
 
 
 class Database():
@@ -35,6 +56,10 @@ class Database():
         self.openDB()
         self.im.execute(CREATE_TABLE_ALTIN)
         self.im.execute(CREATE_TABLE_FIYAT)
+        
+        self.im.execute(CREATE_TABLE_HAS_ALTIN)
+        self.im.execute(CREATE_TABLE_HAS_ALTIN_FIYAT)
+        
         self.db.commit()
         self.db.close()
     
@@ -104,4 +129,55 @@ class Database():
         self.im.execute(f"UPDATE altin SET alisFiyati = {alisFiyati}, satisFiyati = {satisFiyati}, tarih = {tarih} WHERE id = {altinID};")
         self.db.commit()
         self.db.close()
+    
+    def addHasAltin(self, hasAltin :HasAltin):
+        self.openDB()
+        dbHasAltin = self.getHasAltin(hasAltin.getCode())
+        if (dbHasAltin is not None):
+            print("Altin zaten var")
+            #bu codea sahip altın varsa  fiyat ekle ve bunun fiyatını güncelle
+            self.addHasAltinFiyat(dbHasAltin.getID(), hasAltin.getAlis(), hasAltin.getSatis(), hasAltin.getTarih())
+            self.updateHasAltin(dbHasAltin.getID(), hasAltin.getAlis(), hasAltin.getSatis(), hasAltin.getTarih())
+            return dbHasAltin.getID()
+        KEY = f"code, alis, satis, tarih"
+        VALUES = f"""
+        '{hasAltin.getCode()}',
+        '{hasAltin.getAlis()}',
+        '{hasAltin.getSatis()}',
+        '{hasAltin.getTarih()}'
+        """
+        self.im.execute(f"INSERT INTO hasAltin ({KEY}) VALUES ({VALUES})")
+        self.db.commit()
+        last_insert_id = self.im.lastrowid
+        hasAltin.setID(last_insert_id)
+        self.db.close()
+        self.addHasAltinFiyat(hasAltin.getID(), hasAltin.getAlis(), hasAltin.getSatis(), hasAltin.getTarih())
         
+    def getHasAltin(self, code:str):
+        self.openDB()
+        self.im.execute(f"SELECT * FROM hasAltin WHERE code = '{code}'")
+        result = self.im.fetchone()
+        if result == None:
+            return None
+        id, code, alis, satis, tarih = result
+        return HasAltin(id, code, alis, satis, tarih)
+    
+    def addHasAltinFiyat(self, hasAltinID:int, hasAltinAlis:float, hasAltinSatis:float, hasAltinTarih:float):
+        self.openDB()
+        KEY = f"hasAltinID, alis, satis, tarih"
+        VALUES = f"""
+        '{hasAltinID}',
+        '{hasAltinAlis}',
+        '{hasAltinSatis}',
+        '{hasAltinTarih}'
+        """
+        self.im.execute(f"INSERT INTO hasAltinFiyat ({KEY}) VALUES ({VALUES})")
+        self.db.commit()
+        self.db.close()
+        
+    def updateHasAltin(self, hasAltinID:int, hasAltinAlis:float, hasAltinSatis:float, hasAltinTarih:float):
+        self.openDB()
+        self.im.execute(f"UPDATE hasAltin SET alis = {hasAltinAlis}, satis = {hasAltinSatis}, tarih = {hasAltinTarih} WHERE id = {hasAltinID};")
+        self.db.commit()
+        self.db.close()
+                
