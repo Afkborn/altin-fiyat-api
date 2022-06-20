@@ -179,4 +179,12 @@ class Database():
         self.im.execute(f"UPDATE hasAltin SET alis = {hasAltinAlis}, satis = {hasAltinSatis}, tarih = {hasAltinTarih} WHERE id = {hasAltinID};")
         self.db.commit()
         self.db.close()
-                
+        
+    def getHasAltinlar(self) -> list[HasAltin]:
+        self.openDB()
+        self.im.execute("SELECT * FROM hasAltin")
+        hasAltinlar = []
+        for hasAltin in self.im.fetchall():
+            id, code, alis, satis, tarih = hasAltin
+            hasAltinlar.append(HasAltin(id, code, alis, satis, tarih))
+        return hasAltinlar
