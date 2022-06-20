@@ -7,6 +7,7 @@ from Python.Model.HasAltin import HasAltin
 from Python.Database import Database
 import requests
 import datetime
+from Python.PyTime import *
 
 class AltinTracker:
     PAGE = "https://www.altinkaynak.com/Altin/Kur/Guncel"
@@ -116,19 +117,26 @@ class AltinTracker:
     def setTracker(self):
         while True:
             if (self.last_get_time_hasaltin + self.TIME_INTERVAL_HASALTIN < time()):
-                print("Has Altın listesi yenileniyor...")
+                print(f" {get_time_command()} Has Altın listesi yenileniyor...")
                 altinList = self.getAltinFromHasAltin()
                 for altin in altinList:
                     self.db.addHasAltin(altin)
-                print("Has Altın listesi yenilendi.") 
+                print(f" {get_time_command()} Has Altın listesi yenilendi.") 
+                self.last_get_time_hasaltin = time()
+            else:
+                yenilemeKalanSure = self.last_get_time_hasaltin + self.TIME_INTERVAL_HASALTIN - time()
+                print(f" Has Altın için yenilemeye {int(yenilemeKalanSure)} saniye kaldı.")
             if (self.last_get_time_altinkaynak + self.TIME_INTERVAL_ALTINKAYNAK < time()):
-                print("Altın Kaynak listesi yenileniyor...")
+                print(f" {get_time_command()} Altın Kaynak listesi yenileniyor...")
                 altinList = self.getAltinList()
                 for altin in altinList:
                     altinID = self.db.addAltin(altin)
                     if (altinID is not None):
                         self.db.addFiyat(altinID, altin.getAlisFiyati(), altin.getSatisFiyati(), time()) 
-                print("Altın Kaynak listesi yenilendi.")
-                
+                print(f" {get_time_command()} Altın Kaynak listesi yenilendi.")
+                self.last_get_time_altinkaynak = time()
+            else:
+                yenilemeKalanSure = self.TIME_INTERVAL_ALTINKAYNAK - (time() - self.last_get_time_altinkaynak)
+                print(f" Altınkaynak için yenilemeye {int(yenilemeKalanSure)} saniye kaldı.")
             sleep(self.WHILE_TIME_INTERVAL)
                 

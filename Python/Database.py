@@ -134,7 +134,6 @@ class Database():
         self.openDB()
         dbHasAltin = self.getHasAltin(hasAltin.getCode())
         if (dbHasAltin is not None):
-            print("Altin zaten var")
             #bu codea sahip altın varsa  fiyat ekle ve bunun fiyatını güncelle
             self.addHasAltinFiyat(dbHasAltin.getID(), hasAltin.getAlis(), hasAltin.getSatis(), hasAltin.getTarih())
             self.updateHasAltin(dbHasAltin.getID(), hasAltin.getAlis(), hasAltin.getSatis(), hasAltin.getTarih())
