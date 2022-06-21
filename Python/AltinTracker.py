@@ -104,7 +104,18 @@ class AltinTracker:
         response = requests.post(self.PAGE_HASALTIN, headers=self.HEADERS_HASALTIN, data=self.DATA_HASALTIN)
         responseJson =  response.json()
         data = responseJson['data']
-        altin_tip = ["ALTIN","ONS","AYAR14","AYAR22","KULCEALTIN","CEYREK_YENI","CEYREK_ESKI","YARIM_YENI","YARIM_ESKI","TEK_YENI","TEK_ESKI","ATA_ESKI","ATA_YENI"]
+        
+        
+        #dict_keys(['USDTRY', 'ALTIN', 'OMRUSD', 'USDPURE', 'EURTRY', 'ONS', 'USDRUB', 
+        # 'EURUSD', 'USDKG', 'USDBGN', 'EURKG', 'JPYTRY', 'AEDUSD', 'AYAR14', 'GBPTRY',
+        # 'KWDUSD', 'AYAR22', 'DKKTRY', 'USDILS', 'SEKTRY', 'USDMAD', 'KULCEALTIN', 'NOKTRY',
+        # 'USDQAR', 'XAUXAG', 'CEYREK_YENI', 'CHFTRY', 'JODUSD', 'CEYREK_ESKI', 'AUDTRY', 'JODTRY',
+        # 'CADTRY', 'YARIM_YENI', 'OMRTRY', 'SARTRY', 'USDCHF', 'YARIM_ESKI', 'AUDUSD', 'TEK_YENI', 
+        # 'RUBTRY', 'USDCAD', 'TEK_ESKI', 'BGNTRY', 'USDDKK', 'ATA_YENI', 'AEDTRY', 'USDSAR', 'ATA_ESKI', 
+        # 'QARTRY', 'USDSEK', 'ATA5_YENI', 'CNYTRY', 'USDJPY', 'ATA5_ESKI', 'USDNOK', 'GREMESE_YENI', 'GBPUSD', 
+        # 'GREMESE_ESKI', 'GUMUSTRY', 'KWDTRY', 'ILSTRY', 'XAGUSD', 'GUMUSUSD', 'MADTRY', 'XPTUSD', 'XPDUSD', 'PLATIN', 'PALADYUM'])
+        # altin_tip = ["ALTIN","ONS","AYAR14","AYAR22","KULCEALTIN","CEYREK_YENI","CEYREK_ESKI","YARIM_YENI","YARIM_ESKI","TEK_YENI","TEK_ESKI","ATA_ESKI","ATA_YENI"]
+        altin_tip = ['USDTRY', 'ALTIN', 'OMRUSD', 'USDPURE', 'EURTRY', 'ONS', 'USDRUB', 'EURUSD', 'USDKG', 'USDBGN', 'EURKG', 'JPYTRY', 'AEDUSD', 'AYAR14', 'GBPTRY','KWDUSD', 'AYAR22', 'DKKTRY', 'USDILS', 'SEKTRY', 'USDMAD', 'KULCEALTIN', 'NOKTRY', 'USDQAR', 'XAUXAG', 'CEYREK_YENI', 'CHFTRY', 'JODUSD', 'CEYREK_ESKI', 'AUDTRY', 'JODTRY', 'CADTRY', 'YARIM_YENI', 'OMRTRY', 'SARTRY', 'USDCHF', 'YARIM_ESKI', 'AUDUSD', 'TEK_YENI','RUBTRY', 'USDCAD', 'TEK_ESKI', 'BGNTRY', 'USDDKK', 'ATA_YENI', 'AEDTRY', 'USDSAR', 'ATA_ESKI',  'QARTRY', 'USDSEK', 'ATA5_YENI', 'CNYTRY', 'USDJPY', 'ATA5_ESKI', 'USDNOK', 'GREMESE_YENI', 'GBPUSD', 'GREMESE_ESKI', 'GUMUSTRY', 'KWDTRY', 'ILSTRY', 'XAGUSD', 'GUMUSUSD', 'MADTRY', 'XPTUSD', 'XPDUSD', 'PLATIN', 'PALADYUM']
         for altin in altin_tip:
             myAltin = data[altin]
             tarih = myAltin["tarih"]  # 20-06-2022 22:50:07 to int  epoch 
