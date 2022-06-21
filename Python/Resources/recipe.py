@@ -4,7 +4,7 @@ from http import HTTPStatus
 
 from ..Database import Database
 
-class AltinKaynakRecipe(Resource):
+class AltinKaynaklarRecipe(Resource):
     db = Database()
     def get(self):
         altinList = self.db.getAltinlar()
@@ -20,7 +20,7 @@ class AltinKaynakRecipe(Resource):
             "status": HTTPStatus.OK,
             'data': dictAltinList}
         
-class HasAltinRecipe(Resource):
+class HasAltinlarRecipe(Resource):
     db = Database()
     def get(self):
         hasAltinList = self.db.getHasAltinlar()
@@ -39,3 +39,17 @@ class HasAltinRecipe(Resource):
         return {
             "status": HTTPStatus.OK,
             "data": dictHasAltinList}
+
+class HasAltinRecipe(Resource):
+    db = Database()
+    def get(self,code):
+        dictAltin = []
+        dbCode = self.db.getHasAltin(code=code)
+        if dbCode == None:
+            return {
+                "status": HTTPStatus.NOT_FOUND,
+                'message': 'Altin bulunamadı'}
+        dictAltin.append(dict(dbCode))
+        return {
+            "status": HTTPStatus.OK,
+            'data': dictAltin}

@@ -188,3 +188,4 @@ class Database():
             id, code, alis, satis, tarih = hasAltin
             hasAltinlar.append(HasAltin(id, code, alis, satis, tarih))
         return hasAltinlar
+    
