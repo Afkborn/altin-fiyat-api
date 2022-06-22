@@ -210,33 +210,43 @@ class AltinTracker:
         for altin, aciklama in altin_tip:
             myAltin = data[altin]
             myHasAltin = self.getHasAltinFromJson(myAltin, aciklama)
-            # dir = myAltin["dir"]
-            # alis_dir = dir["alis_dir"]
-            # if (alis_dir == "down"):
-            #     alis_dir = -1
-            # elif (alis_dir == "up"):
-            #     alis_dir = 1
-            # else:
-            #     alis_dir = 0
-            # satis_dir = dir["satis_dir"]
-            # if (satis_dir == "down"):
-            #     satis_dir = -1
-            # elif (satis_dir == "up"):
-            #     satis_dir = 1
-            # else:
-            #     satis_dir = 0
-            # dusuk = myAltin["dusuk"]
-            # yuksek = myAltin["yuksek"]
-            # kapanis = myAltin["kapanis"]
-            # tarih = myAltin["tarih"] 
-            # date_obj = datetime.datetime.strptime(tarih, '%d-%m-%Y %H:%M:%S')
-            # myHasAltin = HasAltin(code=myAltin['code'],alis=myAltin['alis'],satis=myAltin['satis'],tarih=date_obj.timestamp(),aciklama=aciklama,alis_dir=alis_dir,satis_dir=satis_dir,dusuk=dusuk,yuksek=yuksek,kapanis=kapanis)
             hasAltinlar.append(myHasAltin)
         return hasAltinlar
         
     
-    def getAlisSatisWithCodeDate(self, code : str, baslangic:str, bitis:str, interval : str = "gun", dil_kodu : str = "tr"):
-        pass
+    def getAlisSatisWithCodeDateByGun(self, code : str, baslangic:str, bitis:str):
+        PAGE_HASALTIN_HISTORY = "https://haremaltin.com/ajax/cur/history"
+        DATA_HASALTIN = {f"kod" : {code}, 
+                        "tarih1" : {baslangic},  #"2012-09-10"
+                        "tarih2" : {bitis},  #"2012-09-15"
+                        "interval" : "gun",
+                        'dil_kodu': "tr"
+                        }
+        response = requests.post(PAGE_HASALTIN_HISTORY, headers=self.HEADERS_HASALTIN, data=DATA_HASALTIN)
+        responseJson = response.json()
+        error = responseJson["error"]
+        
+        if (error != False):
+            print("API ERROR")
+            return None, None, None
+        if (not "data" in responseJson):
+            print("DATA ERROR")
+            return None, None, None
+        gunler_list = []
+        data = responseJson["data"]
+        meta = responseJson["meta"]
+        gunler_arası_en_yuksek = meta["yuksek"]
+        gunler_arası_en_dusuk = meta["dusuk"]
+        for gun in data:
+            alis = gun["alis"]
+            satis = gun["satis"]
+            kayit_tarihi = gun["kayit_tarihi"]
+            gunler_list.append({
+                "alis" : alis,
+                "satis" : satis,
+                "kayit_tarihi" : kayit_tarihi
+            })
+        return gunler_arası_en_dusuk,gunler_arası_en_yuksek,gunler_list
     
     def setTracker(self):
         while True:
