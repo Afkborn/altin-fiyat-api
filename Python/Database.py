@@ -30,7 +30,8 @@ CREATE_TABLE_HAS_ALTIN = f"""CREATE TABLE IF NOT EXISTS hasAltin (
     code TEXT,
     alis REAL,
     satis REAL,
-    tarih REAL
+    tarih REAL,
+    aciklama TEXT
     );
     """
     
@@ -136,14 +137,15 @@ class Database():
         if (dbHasAltin is not None):
             #bu codea sahip altın varsa  fiyat ekle ve bunun fiyatını güncelle
             self.addHasAltinFiyat(dbHasAltin.getID(), hasAltin.getAlis(), hasAltin.getSatis(), hasAltin.getTarih())
-            self.updateHasAltin(dbHasAltin.getID(), hasAltin.getAlis(), hasAltin.getSatis(), hasAltin.getTarih())
+            self.updateHasAltin(dbHasAltin.getID(), hasAltin.getAlis(), hasAltin.getSatis(), hasAltin.getTarih(), aciklama=hasAltin.getAciklama())
             return dbHasAltin.getID()
-        KEY = f"code, alis, satis, tarih"
+        KEY = f"code, alis, satis, tarih, aciklama"
         VALUES = f"""
         '{hasAltin.getCode()}',
         '{hasAltin.getAlis()}',
         '{hasAltin.getSatis()}',
-        '{hasAltin.getTarih()}'
+        '{hasAltin.getTarih()}',
+        '{hasAltin.getAciklama()}'
         """
         self.im.execute(f"INSERT INTO hasAltin ({KEY}) VALUES ({VALUES})")
         self.db.commit()
@@ -158,8 +160,8 @@ class Database():
         result = self.im.fetchone()
         if result == None:
             return None
-        id, code, alis, satis, tarih = result
-        return HasAltin(id, code, alis, satis, tarih)
+        id, code, alis, satis, tarih, aciklama = result
+        return HasAltin(id, code, alis, satis, tarih,aciklama)
     
     def addHasAltinFiyat(self, hasAltinID:int, hasAltinAlis:float, hasAltinSatis:float, hasAltinTarih:float):
         self.openDB()
@@ -174,9 +176,9 @@ class Database():
         self.db.commit()
         self.db.close()
         
-    def updateHasAltin(self, hasAltinID:int, hasAltinAlis:float, hasAltinSatis:float, hasAltinTarih:float):
+    def updateHasAltin(self, hasAltinID:int, hasAltinAlis:float, hasAltinSatis:float, hasAltinTarih:float, aciklama:str):
         self.openDB()
-        self.im.execute(f"UPDATE hasAltin SET alis = {hasAltinAlis}, satis = {hasAltinSatis}, tarih = {hasAltinTarih} WHERE id = {hasAltinID};")
+        self.im.execute(f"UPDATE hasAltin SET alis = {hasAltinAlis}, satis = {hasAltinSatis}, tarih = {hasAltinTarih}, aciklama = '{aciklama}' WHERE id = {hasAltinID};")
         self.db.commit()
         self.db.close()
         
@@ -185,7 +187,7 @@ class Database():
         self.im.execute("SELECT * FROM hasAltin")
         hasAltinlar = []
         for hasAltin in self.im.fetchall():
-            id, code, alis, satis, tarih = hasAltin
-            hasAltinlar.append(HasAltin(id, code, alis, satis, tarih))
+            id, code, alis, satis, tarih, aciklama = hasAltin
+            hasAltinlar.append(HasAltin(id, code, alis, satis, tarih, aciklama))
         return hasAltinlar
     

@@ -30,7 +30,8 @@ class HasAltinlarRecipe(Resource):
                 "code" : hasAltin.getCode(),
                 "alis" : hasAltin.getAlis(),
                 "satis" : hasAltin.getSatis(),
-                "tarih" : hasAltin.getTarih()
+                "tarih" : hasAltin.getTarih(),
+                "aciklama" : hasAltin.getAciklama()
             })
         if (len(dictHasAltinList) == 0):
             return {

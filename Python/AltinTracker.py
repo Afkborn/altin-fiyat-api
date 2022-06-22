@@ -34,6 +34,9 @@ class AltinTracker:
     TIME_INTERVAL_HASALTIN = 300 # kaç saniyede bir kontrol edileceği
     TIME_INTERVAL_ALTINKAYNAK = 6000
     WHILE_TIME_INTERVAL = 10
+    
+    ALTIN_KAYNAK_TRACK = False
+    HAS_ALTIN_TRACK = True
     def __init__(self) -> None:
         self.db = Database()
     
@@ -104,29 +107,54 @@ class AltinTracker:
         response = requests.post(self.PAGE_HASALTIN, headers=self.HEADERS_HASALTIN, data=self.DATA_HASALTIN)
         responseJson =  response.json()
         data = responseJson['data']
-        altin_tip = ['USDTRY', 'ALTIN', 'OMRUSD', 'USDPURE', 'EURTRY', 'ONS', 'USDRUB', 'EURUSD', 'USDKG', 'USDBGN', 'EURKG', 'JPYTRY', 'AEDUSD', 'AYAR14', 'GBPTRY','KWDUSD', 'AYAR22', 'DKKTRY', 'USDILS', 'SEKTRY', 'USDMAD', 'KULCEALTIN', 'NOKTRY', 'USDQAR', 'XAUXAG', 'CEYREK_YENI', 'CHFTRY', 'JODUSD', 'CEYREK_ESKI', 'AUDTRY', 'JODTRY', 'CADTRY', 'YARIM_YENI', 'OMRTRY', 'SARTRY', 'USDCHF', 'YARIM_ESKI', 'AUDUSD', 'TEK_YENI','RUBTRY', 'USDCAD', 'TEK_ESKI', 'BGNTRY', 'USDDKK', 'ATA_YENI', 'AEDTRY', 'USDSAR', 'ATA_ESKI',  'QARTRY', 'USDSEK', 'ATA5_YENI', 'CNYTRY', 'USDJPY', 'ATA5_ESKI', 'USDNOK', 'GREMESE_YENI', 'GBPUSD', 'GREMESE_ESKI', 'GUMUSTRY', 'KWDTRY', 'ILSTRY', 'XAGUSD', 'GUMUSUSD', 'MADTRY', 'XPTUSD', 'XPDUSD', 'PLATIN', 'PALADYUM']
-        for altin in altin_tip:
+
+        altin_tip = [
+                    ('USDTRY',"Dolar/TL"), ('ALTIN',"Has Altın"), ('OMRUSD',"Umman Riyali/Dolar"),
+                    ('USDPURE',"Pure Amerikan Doları"), ('EURTRY',"Euro/TL"), ('ONS',"Ons Altın"),
+                    ('USDRUB',"Dolar/Ruble"), ('EURUSD',"Euro/Dolar"), ('USDKG',"1 Kilo Altın (USD)"),
+                    ('USDBGN',"Dolar/Bulgar Levası"), ('EURKG',"1 Kilo Altın (Euro)"), ('JPYTRY',"Japon Yeni/TL"),
+                    ('AEDUSD',"Birleşik Arap Emirlikleri Dirhemi/Dolar"), ('AYAR14',"14 Ayar Altın"), ('GBPTRY',"İngiliz Sterlini/TL"),
+                    ('KWDUSD',"Kuveyt Dinarı/Dolar"), ('AYAR22',"22 Ayar Altın"), ('DKKTRY',"Danimarka Kronu/TL"),
+                    ('USDILS',"Dolar/İsrail Şekeli"), ('SEKTRY',"İsveç Kronu/TL"), ('USDMAD',"Dolar/Fas Dirhemi"),
+                    ('KULCEALTIN',"Külçe Altın"), ('NOKTRY',"Norveç Kronu/TL"), ('USDQAR',"Dolar/Katar Riyali"),
+                    ('XAUXAG',"Altın Spot/Gümüş Spot"), ('CEYREK_YENI',"Çeyrek Altın (Yeni)"), ('CHFTRY',"İsviçre Frangı/TL"),
+                    ('JODUSD',"Ürdün Dinarı/Dolar"), ('CEYREK_ESKI',"Çeyrek Altın (Eski)"), ('AUDTRY',"Avustralya Doları/TL"),
+                    ('JODTRY',"Ürdün Dinarı/TL"), ('CADTRY',"Kanada Doları/TL"), ('YARIM_YENI',"Yarım Altın (Yeni)"),
+                    ('OMRTRY',"Umman Riyali/TL"), ('SARTRY',"Suudi Arabistan Riyali/TL"), ('USDCHF',"Dolar/İsviçre Frangı"),
+                    ('YARIM_ESKI',"Yarım Altın (Eski)"), ('AUDUSD',"Avustralya Doları/Dolar"), ('TEK_YENI',"Tam Altın (Yeni)"),
+                    ('RUBTRY',"Ruble/TL"), ('USDCAD',"Dolar/Kanada Doları"), ('TEK_ESKI',"Tam Altın (Eski)"),
+                    ('BGNTRY',"Bulgar Levası/TL"), ('USDDKK',"Dolar/Danimarka Kronu"), ('ATA_YENI',"Ata Altın (Yeni)"),
+                    ('AEDTRY',"Birleşik Arap Emirlikleri Dirhemi/TL"), ('USDSAR',"Dolar/Suudi Arabistan Riyali"), ('ATA_ESKI',"Ata Altın (Eski)"),
+                    ('QARTRY',"Katar Riyali/TL"), ('USDSEK',"Dolar/İsveç Kronu"), ('ATA5_YENI',"5 Ata Altın (Yeni) "),
+                    ('CNYTRY',"Çin Yuanı/TL"), ('USDJPY',"Dolar/Japon Yeni"), ('ATA5_ESKI',"5 Ata Altın (Eski)"),
+                    ('USDNOK',"Dolar/Norveç Kronu"), ('GREMESE_YENI',"Gremese Altın (Yeni)"), ('GBPUSD',"İngiliz Sterlini/Dolar"),
+                    ('GREMESE_ESKI',"Gremese Altın (Eski)"), ('GUMUSTRY',"Gümüş"), ('KWDTRY',"Kuveyt Dinari/TL"),
+                    ('ILSTRY',"İsrail Şekeli/TL"), ('XAGUSD',"Gümüş Spot/Dolar"), ('GUMUSUSD',"Gümüş/Dolar"),
+                    ('MADTRY',"Fas Dirhemi/TL"), ('XPTUSD',"Platin Spot/Dolar"), ('XPDUSD',"Paladyum Spot/Dolar"),
+                    ('PLATIN',"Platin/Dolar"), ('PALADYUM',"Paladyum/Dolar")]
+        for altin, aciklama in altin_tip:
             myAltin = data[altin]
+            
             tarih = myAltin["tarih"] 
             date_obj = datetime.datetime.strptime(tarih, '%d-%m-%Y %H:%M:%S')
-            myHasAltin = HasAltin(code=myAltin['code'],alis=myAltin['alis'],satis=myAltin['satis'],tarih=date_obj.timestamp())
+            myHasAltin = HasAltin(code=myAltin['code'],alis=myAltin['alis'],satis=myAltin['satis'],tarih=date_obj.timestamp(),aciklama=aciklama)
             hasAltinlar.append(myHasAltin)
         return hasAltinlar
         
     
     def setTracker(self):
         while True:
-            if (self.last_get_time_hasaltin + self.TIME_INTERVAL_HASALTIN < time()):
+            
+            if (self.last_get_time_hasaltin + self.TIME_INTERVAL_HASALTIN < time() and self.HAS_ALTIN_TRACK):
                 print(f" {get_time_command()} Has Altın listesi yenileniyor...")
                 altinList = self.getAltinFromHasAltin()
                 for altin in altinList:
                     self.db.addHasAltin(altin)
                 print(f" {get_time_command()} Has Altın listesi yenilendi.") 
                 self.last_get_time_hasaltin = time()
-            else:
-                yenilemeKalanSure = self.last_get_time_hasaltin + self.TIME_INTERVAL_HASALTIN - time()
-                print(f" Has Altın için yenilemeye {int(yenilemeKalanSure)} saniye kaldı.")
-            if (self.last_get_time_altinkaynak + self.TIME_INTERVAL_ALTINKAYNAK < time()):
+                
+                
+            if (self.last_get_time_altinkaynak + self.TIME_INTERVAL_ALTINKAYNAK < time() and self.ALTIN_KAYNAK_TRACK):
                 print(f" {get_time_command()} Altın Kaynak listesi yenileniyor...")
                 altinList = self.getAltinList()
                 for altin in altinList:
@@ -135,8 +163,6 @@ class AltinTracker:
                         self.db.addFiyat(altinID, altin.getAlisFiyati(), altin.getSatisFiyati(), time()) 
                 print(f" {get_time_command()} Altın Kaynak listesi yenilendi.")
                 self.last_get_time_altinkaynak = time()
-            else:
-                yenilemeKalanSure = self.TIME_INTERVAL_ALTINKAYNAK - (time() - self.last_get_time_altinkaynak)
-                print(f" Altınkaynak için yenilemeye {int(yenilemeKalanSure)} saniye kaldı.")
+
             sleep(self.WHILE_TIME_INTERVAL)
                 
