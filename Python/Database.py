@@ -184,6 +184,10 @@ class Database():
         return HasAltin(id, code, alis, satis, tarih,aciklama, alis_dir,satis_dir,dusuk, yuksek, kapanis)
     
     def addHasAltinFiyat(self, hasAltinID:int, hasAltinAlis:float, hasAltinSatis:float, hasAltinTarih:float):
+        _, alis, satis, _ = self.getLastHasAltinFiyat(hasAltinID=hasAltinID)
+        if (alis != None and satis != None):
+            if (alis == hasAltinAlis, satis == hasAltinSatis):
+                return None
         self.openDB()
         KEY = f"hasAltinID, alis, satis, tarih"
         VALUES = f"""
@@ -195,7 +199,18 @@ class Database():
         self.im.execute(f"INSERT INTO hasAltinFiyat ({KEY}) VALUES ({VALUES})")
         self.db.commit()
         self.db.close()
+    
+    def getLastHasAltinFiyat(self, hasAltinID:int):
+        self.openDB()
+        self.im.execute(f"SELECT * FROM hasAltinFiyat WHERE hasAltinID = {hasAltinID} ORDER BY tarih DESC")
+        result = self.im.fetchone()
+        if result == None:
+            return None, None,None,None
+        hasAltinID, alis, satis, tarih = result
+        self.db.close()
+        return hasAltinID, alis,satis,tarih
         
+    
     def updateHasAltin(self, hasAltinID:int, hasAltinAlis:float, hasAltinSatis:float, hasAltinTarih:float, aciklama:str, alis_dir : int, satis_dir : int, dusuk : float, yuksek : float, kapanis : float):
         self.openDB()
         self.im.execute(f"""UPDATE hasAltin SET alis = {hasAltinAlis},
