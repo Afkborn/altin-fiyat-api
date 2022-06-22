@@ -109,35 +109,104 @@ class AltinTracker:
         data = responseJson['data']
 
         altin_tip = [
-                    ('USDTRY',"Dolar/TL"), ('ALTIN',"Has Altın"), ('OMRUSD',"Umman Riyali/Dolar"),
-                    ('USDPURE',"Pure Amerikan Doları"), ('EURTRY',"Euro/TL"), ('ONS',"Ons Altın"),
-                    ('USDRUB',"Dolar/Ruble"), ('EURUSD',"Euro/Dolar"), ('USDKG',"1 Kilo Altın (USD)"),
-                    ('USDBGN',"Dolar/Bulgar Levası"), ('EURKG',"1 Kilo Altın (Euro)"), ('JPYTRY',"Japon Yeni/TL"),
-                    ('AEDUSD',"Birleşik Arap Emirlikleri Dirhemi/Dolar"), ('AYAR14',"14 Ayar Altın"), ('GBPTRY',"İngiliz Sterlini/TL"),
-                    ('KWDUSD',"Kuveyt Dinarı/Dolar"), ('AYAR22',"22 Ayar Altın"), ('DKKTRY',"Danimarka Kronu/TL"),
-                    ('USDILS',"Dolar/İsrail Şekeli"), ('SEKTRY',"İsveç Kronu/TL"), ('USDMAD',"Dolar/Fas Dirhemi"),
-                    ('KULCEALTIN',"Külçe Altın"), ('NOKTRY',"Norveç Kronu/TL"), ('USDQAR',"Dolar/Katar Riyali"),
-                    ('XAUXAG',"Altın Spot/Gümüş Spot"), ('CEYREK_YENI',"Çeyrek Altın (Yeni)"), ('CHFTRY',"İsviçre Frangı/TL"),
-                    ('JODUSD',"Ürdün Dinarı/Dolar"), ('CEYREK_ESKI',"Çeyrek Altın (Eski)"), ('AUDTRY',"Avustralya Doları/TL"),
-                    ('JODTRY',"Ürdün Dinarı/TL"), ('CADTRY',"Kanada Doları/TL"), ('YARIM_YENI',"Yarım Altın (Yeni)"),
-                    ('OMRTRY',"Umman Riyali/TL"), ('SARTRY',"Suudi Arabistan Riyali/TL"), ('USDCHF',"Dolar/İsviçre Frangı"),
-                    ('YARIM_ESKI',"Yarım Altın (Eski)"), ('AUDUSD',"Avustralya Doları/Dolar"), ('TEK_YENI',"Tam Altın (Yeni)"),
-                    ('RUBTRY',"Ruble/TL"), ('USDCAD',"Dolar/Kanada Doları"), ('TEK_ESKI',"Tam Altın (Eski)"),
-                    ('BGNTRY',"Bulgar Levası/TL"), ('USDDKK',"Dolar/Danimarka Kronu"), ('ATA_YENI',"Ata Altın (Yeni)"),
-                    ('AEDTRY',"Birleşik Arap Emirlikleri Dirhemi/TL"), ('USDSAR',"Dolar/Suudi Arabistan Riyali"), ('ATA_ESKI',"Ata Altın (Eski)"),
-                    ('QARTRY',"Katar Riyali/TL"), ('USDSEK',"Dolar/İsveç Kronu"), ('ATA5_YENI',"5 Ata Altın (Yeni) "),
-                    ('CNYTRY',"Çin Yuanı/TL"), ('USDJPY',"Dolar/Japon Yeni"), ('ATA5_ESKI',"5 Ata Altın (Eski)"),
-                    ('USDNOK',"Dolar/Norveç Kronu"), ('GREMESE_YENI',"Gremese Altın (Yeni)"), ('GBPUSD',"İngiliz Sterlini/Dolar"),
-                    ('GREMESE_ESKI',"Gremese Altın (Eski)"), ('GUMUSTRY',"Gümüş"), ('KWDTRY',"Kuveyt Dinari/TL"),
-                    ('ILSTRY',"İsrail Şekeli/TL"), ('XAGUSD',"Gümüş Spot/Dolar"), ('GUMUSUSD',"Gümüş/Dolar"),
-                    ('MADTRY',"Fas Dirhemi/TL"), ('XPTUSD',"Platin Spot/Dolar"), ('XPDUSD',"Paladyum Spot/Dolar"),
-                    ('PLATIN',"Platin/Dolar"), ('PALADYUM',"Paladyum/Dolar")]
+                    #ALTIN
+                    ('CEYREK_YENI',"Yeni Çeyrek Altın/TL"), 
+                    ('CEYREK_ESKI',"Eski Çeyrek Altın/TL"), 
+                    ('YARIM_YENI',"Yeni Yarım Altın/TL"),
+                    ('YARIM_ESKI',"Eski Yarım Altın/TL"),
+                    ('TEK_YENI',"Yeni Tam Altın/TL"),
+                    ('TEK_ESKI',"Eski Tam Altın/TL"),
+                    ('ATA_YENI',"Yeni Ata Altın/TL"),
+                    ('ATA_ESKI',"Eski Ata Altın/TL"),
+                    ('GREMESE_YENI',"Yeni Gremese Altın/TL"),
+                    ('GREMESE_ESKI',"Eski Gremese Altın/TL"),
+                    ('ATA5_YENI',"Yeni 5 Ata Altın/TL"),
+                    ('ATA5_ESKI',"Eski 5 Ata Altın/TL"),
+                    ('AYAR14',"14 Ayar Gram Altın/TL"),
+                    ('AYAR22',"22 Ayar Gram Altın/TL"),
+                    ('ONS',"Ons Altın/Dolar"),
+                    ('USDKG',"1 KG Altın/Dolar"),
+                    ('EURKG',"1 KG Altın/Euro"),
+                    
+                    #TL
+                    ('USDTRY',"Dolar/TL"),
+                    ('EURTRY',"Euro/TL"),
+                    ('BGNTRY',"Bulgar Levası/TL"),
+                    ('AEDTRY',"Birleşik Arap Emirlikleri Dirhemi/TL"),
+                    ('JPYTRY',"Japon Yeni/TL"),
+                    ('GUMUSTRY',"Gümüş/TL"), 
+                    ('ALTIN',"Has Altın/TL"),
+                    ('GBPTRY',"İngiliz Sterlini/TL"),
+                    ('DKKTRY',"Danimarka Kronu/TL"),
+                    ('SEKTRY',"İsveç Kronu/TL"),
+                    ('NOKTRY',"Norveç Kronu/TL"), 
+                    ('CHFTRY',"İsviçre Frangı/TL"),
+                    ('AUDTRY',"Avustralya Doları/TL"),
+                    ('JODTRY',"Ürdün Dinarı/TL"),
+                    ('CADTRY',"Kanada Doları/TL"), 
+                    ('OMRTRY',"Umman Riyali/TL"), 
+                    ('SARTRY',"Suudi Arabistan Riyali/TL"), 
+                    ('RUBTRY',"Ruble/TL"), 
+                    ('KWDTRY',"Kuveyt Dinarı/TL"),
+                    ('ILSTRY',"İsrail Şekeli/TL"),
+                    ('MADTRY',"Fas Dirhemi/TL"),
+                    ('CNYTRY',"Çin Yuanı/TL"), 
+                    ('QARTRY',"Katar Riyali/TL"), 
+                    
+                    #TO DOLAR
+                    ('EURUSD',"Euro/Dolar"),
+                    ('OMRUSD',"Umman Riyali/Dolar"),
+                    ('JODUSD',"Ürdün Dinarı/Dolar"),
+                    ('GBPUSD',"İngiliz Sterlini/Dolar"),
+                    ('XAGUSD',"Gümüş Spot/Dolar"),
+                    ('GUMUSUSD',"Gümüş/Dolar"),
+                    ('XPTUSD',"Platin Spot/Dolar"),
+                    ('XPDUSD',"Paladyum Spot/Dolar"),
+                    ('PLATIN',"Platin/Dolar"), 
+                    ('PALADYUM',"Paladyum/Dolar"),
+                    ('KWDUSD',"Kuveyt Dinarı/Dolar"),
+                    ('AEDUSD',"Birleşik Arap Emirlikleri Dirhemi/Dolar"),
+                    ('AUDUSD',"Avustralya Doları/Dolar"), 
+                    
+                    #FROM DOLAR
+                    ('USDBGN',"Dolar/Bulgar Levası"),
+                    ('USDILS',"Dolar/İsrail Şekeli"), 
+                    ('USDMAD',"Dolar/Fas Dirhemi"),
+                    ('USDQAR',"Dolar/Katar Riyali"),
+                    ('USDSAR',"Dolar/Suudi Arabistan Riyali"), 
+                    ('USDSEK',"Dolar/İsveç Kronu"), 
+                    ('USDJPY',"Dolar/Japon Yeni"), 
+                    ('USDNOK',"Dolar/Norveç Kronu"), 
+                    ('USDRUB',"Dolar/Ruble"),
+                    ('USDCHF',"Dolar/İsviçre Frangı"),
+                    ('USDCAD',"Dolar/Kanada Doları"), 
+                    ('USDDKK',"Dolar/Danimarka Kronu"),                  
+                    ]
+        #('USDPURE',"Pure Amerikan Doları"),  ('XAUXAG',"Altın Spot/Gümüş Spot"), ('KULCEALTIN',"Külçe Altın"), 
         for altin, aciklama in altin_tip:
-            myAltin = data[altin]
             
+            myAltin = data[altin]
+            dir = myAltin["dir"]
+            alis_dir = dir["alis_dir"]
+            if (alis_dir == "down"):
+                alis_dir = -1
+            elif (alis_dir == "up"):
+                alis_dir = 1
+            else:
+                alis_dir = 0
+            satis_dir = dir["satis_dir"]
+            if (satis_dir == "down"):
+                satis_dir = -1
+            elif (satis_dir == "up"):
+                satis_dir = 1
+            else:
+                satis_dir = 0
+            dusuk = myAltin["dusuk"]
+            yuksek = myAltin["yuksek"]
+            kapanis = myAltin["kapanis"]
             tarih = myAltin["tarih"] 
             date_obj = datetime.datetime.strptime(tarih, '%d-%m-%Y %H:%M:%S')
-            myHasAltin = HasAltin(code=myAltin['code'],alis=myAltin['alis'],satis=myAltin['satis'],tarih=date_obj.timestamp(),aciklama=aciklama)
+            myHasAltin = HasAltin(code=myAltin['code'],alis=myAltin['alis'],satis=myAltin['satis'],tarih=date_obj.timestamp(),aciklama=aciklama,alis_dir=alis_dir,satis_dir=satis_dir,dusuk=dusuk,yuksek=yuksek,kapanis=kapanis)
             hasAltinlar.append(myHasAltin)
         return hasAltinlar
         

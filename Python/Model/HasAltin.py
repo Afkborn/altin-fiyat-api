@@ -6,6 +6,11 @@ class HasAltin:
                  satis : float = None,
                  tarih : float = None,
                  aciklama : str = None,
+                 alis_dir : int = 0,
+                 satis_dir : int = 0,
+                 dusuk : float = None,
+                 yuksek : float = None,
+                 kapanis : float = None
                  ):
         self.__id = id
         self.__code = code
@@ -13,6 +18,11 @@ class HasAltin:
         self.__satis = float(satis)
         self.__tarih = tarih
         self.__aciklama = aciklama
+        self.__alis_dir = alis_dir
+        self.__satis_dir = satis_dir
+        self.__dusuk = dusuk
+        self.__yuksek = yuksek
+        self.__kapanis = kapanis
         
     def getID(self) -> int:
         return self.__id
@@ -26,6 +36,16 @@ class HasAltin:
         return self.__tarih
     def getAciklama(self):
         return self.__aciklama
+    def getAlisDir(self):
+        return self.__alis_dir
+    def getSatisDir(self):
+        return self.__satis_dir
+    def getDusuk(self):
+        return self.__dusuk
+    def getYuksek(self):
+        return self.__yuksek
+    def getKapanis(self):
+        return self.__kapanis
     
     def setID(self, id : int) -> None:
         self.__id = id
