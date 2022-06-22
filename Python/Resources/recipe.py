@@ -33,7 +33,10 @@ class HasAltinlarRecipe(Resource):
                 "tarih" : hasAltin.getTarih(),
                 "aciklama" : hasAltin.getAciklama(),
                 'alis_dir' : hasAltin.getAlisDir(),
-                'satis_dir' : hasAltin.getSatisDir()
+                'satis_dir' : hasAltin.getSatisDir(),
+                "dusuk" : hasAltin.getDusuk(),
+                "yuksek" : hasAltin.getYuksek(),
+                "kapanis" : hasAltin.getKapanis()
             })
         if (len(dictHasAltinList) == 0):
             return {
