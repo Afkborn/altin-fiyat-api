@@ -102,6 +102,30 @@ class AltinTracker:
             self.last_get_time_altinkaynak = time()
             return self.altinList
     
+    
+    def getHasAltinFromJson(self, myAltin, aciklama):
+        dir = myAltin["dir"]
+        alis_dir = dir["alis_dir"]
+        if (alis_dir == "down"):
+            alis_dir = -1
+        elif (alis_dir == "up"):
+            alis_dir = 1
+        else:
+            alis_dir = 0
+        satis_dir = dir["satis_dir"]
+        if (satis_dir == "down"):
+            satis_dir = -1
+        elif (satis_dir == "up"):
+            satis_dir = 1
+        else:
+            satis_dir = 0
+        dusuk = myAltin["dusuk"]
+        yuksek = myAltin["yuksek"]
+        kapanis = myAltin["kapanis"]
+        tarih = myAltin["tarih"] 
+        date_obj = datetime.datetime.strptime(tarih, '%d-%m-%Y %H:%M:%S')
+        return HasAltin(code=myAltin['code'],alis=myAltin['alis'],satis=myAltin['satis'],tarih=date_obj.timestamp(),aciklama=aciklama,alis_dir=alis_dir,satis_dir=satis_dir,dusuk=dusuk,yuksek=yuksek,kapanis=kapanis)
+    
     def getAltinFromHasAltin(self) -> list[HasAltin]:
         hasAltinlar = []
         response = requests.post(self.PAGE_HASALTIN, headers=self.HEADERS_HASALTIN, data=self.DATA_HASALTIN)
@@ -182,34 +206,37 @@ class AltinTracker:
                     ('USDCAD',"Dolar/Kanada Doları"), 
                     ('USDDKK',"Dolar/Danimarka Kronu"),                  
                     ]
-        #('USDPURE',"Pure Amerikan Doları"),  ('XAUXAG',"Altın Spot/Gümüş Spot"), ('KULCEALTIN',"Külçe Altın"), 
+        #IGNORED VALUABLE ('USDPURE',"Pure Amerikan Doları"),  ('XAUXAG',"Altın Spot/Gümüş Spot"), ('KULCEALTIN',"Külçe Altın"), 
         for altin, aciklama in altin_tip:
-            
             myAltin = data[altin]
-            dir = myAltin["dir"]
-            alis_dir = dir["alis_dir"]
-            if (alis_dir == "down"):
-                alis_dir = -1
-            elif (alis_dir == "up"):
-                alis_dir = 1
-            else:
-                alis_dir = 0
-            satis_dir = dir["satis_dir"]
-            if (satis_dir == "down"):
-                satis_dir = -1
-            elif (satis_dir == "up"):
-                satis_dir = 1
-            else:
-                satis_dir = 0
-            dusuk = myAltin["dusuk"]
-            yuksek = myAltin["yuksek"]
-            kapanis = myAltin["kapanis"]
-            tarih = myAltin["tarih"] 
-            date_obj = datetime.datetime.strptime(tarih, '%d-%m-%Y %H:%M:%S')
-            myHasAltin = HasAltin(code=myAltin['code'],alis=myAltin['alis'],satis=myAltin['satis'],tarih=date_obj.timestamp(),aciklama=aciklama,alis_dir=alis_dir,satis_dir=satis_dir,dusuk=dusuk,yuksek=yuksek,kapanis=kapanis)
+            myHasAltin = self.getHasAltinFromJson(myAltin, aciklama)
+            # dir = myAltin["dir"]
+            # alis_dir = dir["alis_dir"]
+            # if (alis_dir == "down"):
+            #     alis_dir = -1
+            # elif (alis_dir == "up"):
+            #     alis_dir = 1
+            # else:
+            #     alis_dir = 0
+            # satis_dir = dir["satis_dir"]
+            # if (satis_dir == "down"):
+            #     satis_dir = -1
+            # elif (satis_dir == "up"):
+            #     satis_dir = 1
+            # else:
+            #     satis_dir = 0
+            # dusuk = myAltin["dusuk"]
+            # yuksek = myAltin["yuksek"]
+            # kapanis = myAltin["kapanis"]
+            # tarih = myAltin["tarih"] 
+            # date_obj = datetime.datetime.strptime(tarih, '%d-%m-%Y %H:%M:%S')
+            # myHasAltin = HasAltin(code=myAltin['code'],alis=myAltin['alis'],satis=myAltin['satis'],tarih=date_obj.timestamp(),aciklama=aciklama,alis_dir=alis_dir,satis_dir=satis_dir,dusuk=dusuk,yuksek=yuksek,kapanis=kapanis)
             hasAltinlar.append(myHasAltin)
         return hasAltinlar
         
+    
+    def getAlisSatisWithCodeDate(self, code : str, baslangic:str, bitis:str, interval : str = "gun", dil_kodu : str = "tr"):
+        pass
     
     def setTracker(self):
         while True:
