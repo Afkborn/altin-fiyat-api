@@ -31,9 +31,9 @@ class AltinTracker:
     altinList : list[Altin] = []
     last_get_time_altinkaynak = 0
     last_get_time_hasaltin = 0
-    TIME_INTERVAL_HASALTIN = 300 # kaç saniyede bir kontrol edileceği
+    TIME_INTERVAL_HASALTIN = 5 # kaç saniyede bir kontrol edileceği
     TIME_INTERVAL_ALTINKAYNAK = 6000
-    WHILE_TIME_INTERVAL = 10
+    WHILE_TIME_INTERVAL = 1
     
     ALTIN_KAYNAK_TRACK = False
     HAS_ALTIN_TRACK = True
