@@ -4,6 +4,8 @@ from http import HTTPStatus
 
 from ..Database import Database
 from ..AltinTracker import AltinTracker
+
+
 class AltinKaynaklarRecipe(Resource):
     db = Database()
     def get(self):
@@ -14,7 +16,7 @@ class AltinKaynaklarRecipe(Resource):
         if (len(dictAltinList) == 0):
             return {
                 "status": HTTPStatus.NOT_FOUND,
-                'message': 'Altin bulunamadı'}
+                'message': 'Değerli bulunamadı'}
         
         return {
             "status": HTTPStatus.OK,
@@ -50,13 +52,12 @@ class HasAltinRecipe(Resource):
     db = Database()
     tracker = AltinTracker()
     def get(self,code):
-        #TODO 
         dictAltin = []
         hasAltin = self.db.getHasAltin(code=code)
         if hasAltin == None:
             return {
                 "status": HTTPStatus.NOT_FOUND,
-                'message': 'Altin bulunamadı'}
+                'message': 'Değerli bulunamadı'}
         dictAltin.append({
                 "code" : hasAltin.getCode(),
                 "alis" : hasAltin.getAlis(),
@@ -89,14 +90,12 @@ class HasAltinRecipe(Resource):
                     'message': 'Veri Yok'}
         return {
             "status" : HTTPStatus.OK,
-            "data" : {
-                "code" : code,
-                "tarih_baslangic" : t1,
-                "tarih_bitis" : t2,
-                "en_dusuk" : en_dusuk,
-                "en_yuksek" : en_yuksek,
-                "alis_satis_gunler" : data
-            }
+            "code" : code,
+            "tarih_baslangic" : t1,
+            "tarih_bitis" : t2,
+            "en_dusuk" : en_dusuk,
+            "en_yuksek" : en_yuksek,
+            "alis_satis_gunler" : data
         }
         
         
