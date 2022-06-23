@@ -186,7 +186,8 @@ class Database():
     def addHasAltinFiyat(self, hasAltinID:int, hasAltinAlis:float, hasAltinSatis:float, hasAltinTarih:float):
         _, alis, satis, _ = self.getLastHasAltinFiyat(hasAltinID=hasAltinID)
         if (alis != None and satis != None):
-            if (alis == hasAltinAlis, satis == hasAltinSatis):
+            if (float(alis) == hasAltinAlis and float(satis) == hasAltinSatis):
+                print(f"zaten var vazgeçtim. {alis} {hasAltinAlis}  {satis} {hasAltinSatis}")
                 return None
         self.openDB()
         KEY = f"hasAltinID, alis, satis, tarih"
