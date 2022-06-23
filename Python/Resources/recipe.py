@@ -46,6 +46,7 @@ class HasAltinlarRecipe(Resource):
                 'message': 'Altin bulunamadı'}
         return {
             "status": HTTPStatus.OK,
+            
             "data": dictHasAltinList}
 
 class HasAltinRecipe(Resource):

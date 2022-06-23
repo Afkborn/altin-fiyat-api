@@ -31,9 +31,9 @@ class AltinTracker:
     altinList : list[Altin] = []
     last_get_time_altinkaynak = 0
     last_get_time_hasaltin = 0
-    TIME_INTERVAL_HASALTIN = 5 # kaç saniyede bir kontrol edileceği
+    TIME_INTERVAL_HASALTIN = 20 # kaç saniyede bir kontrol edileceği
     TIME_INTERVAL_ALTINKAYNAK = 6000
-    WHILE_TIME_INTERVAL = 1
+    WHILE_TIME_INTERVAL = 5
     
     ALTIN_KAYNAK_TRACK = False
     HAS_ALTIN_TRACK = True
@@ -241,10 +241,12 @@ class AltinTracker:
             alis = gun["alis"]
             satis = gun["satis"]
             kayit_tarihi = gun["kayit_tarihi"]
+            #'2012-09-10 23:29:32' does not match format '%d-%m-%Y %H:%M:%S'
+            dateObj = datetime.datetime.strptime(kayit_tarihi, '%Y-%m-%d %H:%M:%S') 
             gunler_list.append({
                 "alis" : alis,
                 "satis" : satis,
-                "kayit_tarihi" : kayit_tarihi
+                "tarih" : dateObj.timestamp()
             })
         return gunler_arası_en_dusuk,gunler_arası_en_yuksek,gunler_list
     
