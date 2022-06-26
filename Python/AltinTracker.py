@@ -119,6 +119,9 @@ class AltinTracker:
             satis_dir = 1
         else:
             satis_dir = 0
+        if (alis_dir == 1 and satis_dir == 1):
+            alis_dir = 0
+            satis_dir = 0
         dusuk = myAltin["dusuk"]
         yuksek = myAltin["yuksek"]
         kapanis = myAltin["kapanis"]
