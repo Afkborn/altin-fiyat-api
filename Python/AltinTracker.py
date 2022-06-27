@@ -178,36 +178,38 @@ class AltinTracker:
                     ('CNYTRY',"Çin Yuanı/TL"), 
                     ('QARTRY',"Katar Riyali/TL"), 
                     
-                    #TO DOLAR
-                    ('EURUSD',"Euro/Dolar"),
-                    ('OMRUSD',"Umman Riyali/Dolar"),
-                    ('JODUSD',"Ürdün Dinarı/Dolar"),
-                    ('GBPUSD',"İngiliz Sterlini/Dolar"),
-                    ('XAGUSD',"Gümüş Spot/Dolar"),
-                    ('GUMUSUSD',"Gümüş/Dolar"),
-                    ('XPTUSD',"Platin Spot/Dolar"),
-                    ('XPDUSD',"Paladyum Spot/Dolar"),
-                    ('PLATIN',"Platin/Dolar"), 
-                    ('PALADYUM',"Paladyum/Dolar"),
-                    ('KWDUSD',"Kuveyt Dinarı/Dolar"),
-                    ('AEDUSD',"Birleşik Arap Emirlikleri Dirhemi/Dolar"),
-                    ('AUDUSD',"Avustralya Doları/Dolar"), 
-                    
-                    #FROM DOLAR
-                    ('USDBGN',"Dolar/Bulgar Levası"),
-                    ('USDILS',"Dolar/İsrail Şekeli"), 
-                    ('USDMAD',"Dolar/Fas Dirhemi"),
-                    ('USDQAR',"Dolar/Katar Riyali"),
-                    ('USDSAR',"Dolar/Suudi Arabistan Riyali"), 
-                    ('USDSEK',"Dolar/İsveç Kronu"), 
-                    ('USDJPY',"Dolar/Japon Yeni"), 
-                    ('USDNOK',"Dolar/Norveç Kronu"), 
-                    ('USDRUB',"Dolar/Ruble"),
-                    ('USDCHF',"Dolar/İsviçre Frangı"),
-                    ('USDCAD',"Dolar/Kanada Doları"), 
-                    ('USDDKK',"Dolar/Danimarka Kronu"),                  
+
+
                     ]
-        #IGNORED VALUABLE ('USDPURE',"Pure Amerikan Doları"),  ('XAUXAG',"Altın Spot/Gümüş Spot"), ('KULCEALTIN',"Külçe Altın"), 
+                    #IGNORED VALUABLE 
+                    # ('USDPURE',"Pure Amerikan Doları"),  ('XAUXAG',"Altın Spot/Gümüş Spot"), ('KULCEALTIN',"Külçe Altın"), 
+                    #FROM DOLAR
+                    # ('USDBGN',"Dolar/Bulgar Levası"),
+                    # ('USDILS',"Dolar/İsrail Şekeli"), 
+                    # ('USDMAD',"Dolar/Fas Dirhemi"),
+                    # ('USDQAR',"Dolar/Katar Riyali"),
+                    # ('USDSAR',"Dolar/Suudi Arabistan Riyali"), 
+                    # ('USDSEK',"Dolar/İsveç Kronu"), 
+                    # ('USDJPY',"Dolar/Japon Yeni"), 
+                    # ('USDNOK',"Dolar/Norveç Kronu"), 
+                    # ('USDRUB',"Dolar/Ruble"),
+                    # ('USDCHF',"Dolar/İsviçre Frangı"),
+                    # ('USDCAD',"Dolar/Kanada Doları"), 
+                    # ('USDDKK',"Dolar/Danimarka Kronu"),   
+                    #TO DOLAR
+                    # ('EURUSD',"Euro/Dolar"),
+                    # ('OMRUSD',"Umman Riyali/Dolar"),
+                    # ('JODUSD',"Ürdün Dinarı/Dolar"),
+                    # ('GBPUSD',"İngiliz Sterlini/Dolar"),
+                    # ('XAGUSD',"Gümüş Spot/Dolar"),
+                    # ('GUMUSUSD',"Gümüş/Dolar"),
+                    # ('XPTUSD',"Platin Spot/Dolar"),
+                    # ('XPDUSD',"Paladyum Spot/Dolar"),
+                    # ('PLATIN',"Platin/Dolar"), 
+                    # ('PALADYUM',"Paladyum/Dolar"),
+                    # ('KWDUSD',"Kuveyt Dinarı/Dolar"),
+                    # ('AEDUSD',"Birleşik Arap Emirlikleri Dirhemi/Dolar"),
+                    # ('AUDUSD',"Avustralya Doları/Dolar"), 
         for altin, aciklama in altin_tip:
             myAltin = data[altin]
             myHasAltin = self.getHasAltinFromJson(myAltin, aciklama)
