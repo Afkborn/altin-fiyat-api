@@ -177,9 +177,6 @@ class AltinTracker:
                     ('MADTRY',"Fas Dirhemi/TL"),
                     ('CNYTRY',"Çin Yuanı/TL"), 
                     ('QARTRY',"Katar Riyali/TL"), 
-                    
-
-
                     ]
                     #IGNORED VALUABLE 
                     # ('USDPURE',"Pure Amerikan Doları"),  ('XAUXAG',"Altın Spot/Gümüş Spot"), ('KULCEALTIN',"Külçe Altın"), 
