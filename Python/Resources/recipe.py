@@ -78,13 +78,22 @@ class HasAltinRecipe(Resource):
     def post(self,code):
         data = request.args
         try:
-            t1 = data["t1"]
-            t2 = data["t2"]
+            allData = data["all"]
+            if (allData == 1 or allData == "1"):
+                allData = True
         except:
-            return {
-                "status": HTTPStatus.BAD_REQUEST,
-                'message': 'Tarih bilgisi gerekli (t1,t2) gerekli'}
-        en_dusuk, en_yuksek, data = self.tracker.getAlisSatisWithCodeDateByGun(code,t1,t2)
+            allData = False
+        if (allData):
+            en_dusuk, en_yuksek, data, t1, t2 = self.tracker.getAllAlisSatisWtihCode(code)
+        else:
+            try:
+                t1 = data["t1"]
+                t2 = data["t2"]
+            except:
+                return {
+                    "status": HTTPStatus.BAD_REQUEST,
+                    'message': 'Tarih bilgisi gerekli (t1,t2) gerekli'}
+            en_dusuk, en_yuksek, data = self.tracker.getAlisSatisWithCodeDateByGun(code,t1,t2)
         if (en_dusuk == None or en_yuksek == None or data == None):
                 return {
                     "status": HTTPStatus.BAD_REQUEST,

@@ -132,81 +132,6 @@ class AltinTracker:
         response = requests.post(self.PAGE_HASALTIN, headers=self.HEADERS_HASALTIN, data=self.DATA_HASALTIN)
         responseJson =  response.json()
         data = responseJson['data']
-
-        altin_tip = [
-                    #ALTIN
-                    ('CEYREK_YENI',"Yeni Çeyrek Altın/TL"), 
-                    ('CEYREK_ESKI',"Eski Çeyrek Altın/TL"), 
-                    ('YARIM_YENI',"Yeni Yarım Altın/TL"),
-                    ('YARIM_ESKI',"Eski Yarım Altın/TL"),
-                    ('TEK_YENI',"Yeni Tam Altın/TL"),
-                    ('TEK_ESKI',"Eski Tam Altın/TL"),
-                    ('ATA_YENI',"Yeni Ata Altın/TL"),
-                    ('ATA_ESKI',"Eski Ata Altın/TL"),
-                    ('GREMESE_YENI',"Yeni Gremese Altın/TL"),
-                    ('GREMESE_ESKI',"Eski Gremese Altın/TL"),
-                    ('ATA5_YENI',"Yeni 5 Ata Altın/TL"),
-                    ('ATA5_ESKI',"Eski 5 Ata Altın/TL"),
-                    ('AYAR14',"14 Ayar Gram Altın/TL"),
-                    ('AYAR22',"22 Ayar Gram Altın/TL"),
-                    ('ONS',"Ons Altın/Dolar"),
-                    ('USDKG',"1 KG Altın/Dolar"),
-                    ('EURKG',"1 KG Altın/Euro"),
-                    
-                    #TL
-                    ('USDTRY',"Dolar/TL"),
-                    ('EURTRY',"Euro/TL"),
-                    ('BGNTRY',"Bulgar Levası/TL"),
-                    ('AEDTRY',"Birleşik Arap Emirlikleri Dirhemi/TL"),
-                    ('JPYTRY',"Japon Yeni/TL"),
-                    ('GUMUSTRY',"Gümüş/TL"), 
-                    ('ALTIN',"Has Altın/TL"),
-                    ('GBPTRY',"İngiliz Sterlini/TL"),
-                    ('DKKTRY',"Danimarka Kronu/TL"),
-                    ('SEKTRY',"İsveç Kronu/TL"),
-                    ('NOKTRY',"Norveç Kronu/TL"), 
-                    ('CHFTRY',"İsviçre Frangı/TL"),
-                    ('AUDTRY',"Avustralya Doları/TL"),
-                    ('JODTRY',"Ürdün Dinarı/TL"),
-                    ('CADTRY',"Kanada Doları/TL"), 
-                    ('OMRTRY',"Umman Riyali/TL"), 
-                    ('SARTRY',"Suudi Arabistan Riyali/TL"), 
-                    ('RUBTRY',"Ruble/TL"), 
-                    ('KWDTRY',"Kuveyt Dinarı/TL"),
-                    ('ILSTRY',"İsrail Şekeli/TL"),
-                    ('MADTRY',"Fas Dirhemi/TL"),
-                    ('CNYTRY',"Çin Yuanı/TL"), 
-                    ('QARTRY',"Katar Riyali/TL"), 
-                    ]
-                    #IGNORED VALUABLE 
-                    # ('USDPURE',"Pure Amerikan Doları"),  ('XAUXAG',"Altın Spot/Gümüş Spot"), ('KULCEALTIN',"Külçe Altın"), 
-                    #FROM DOLAR
-                    # ('USDBGN',"Dolar/Bulgar Levası"),
-                    # ('USDILS',"Dolar/İsrail Şekeli"), 
-                    # ('USDMAD',"Dolar/Fas Dirhemi"),
-                    # ('USDQAR',"Dolar/Katar Riyali"),
-                    # ('USDSAR',"Dolar/Suudi Arabistan Riyali"), 
-                    # ('USDSEK',"Dolar/İsveç Kronu"), 
-                    # ('USDJPY',"Dolar/Japon Yeni"), 
-                    # ('USDNOK',"Dolar/Norveç Kronu"), 
-                    # ('USDRUB',"Dolar/Ruble"),
-                    # ('USDCHF',"Dolar/İsviçre Frangı"),
-                    # ('USDCAD',"Dolar/Kanada Doları"), 
-                    # ('USDDKK',"Dolar/Danimarka Kronu"),   
-                    #TO DOLAR
-                    # ('EURUSD',"Euro/Dolar"),
-                    # ('OMRUSD',"Umman Riyali/Dolar"),
-                    # ('JODUSD',"Ürdün Dinarı/Dolar"),
-                    # ('GBPUSD',"İngiliz Sterlini/Dolar"),
-                    # ('XAGUSD',"Gümüş Spot/Dolar"),
-                    # ('GUMUSUSD',"Gümüş/Dolar"),
-                    # ('XPTUSD',"Platin Spot/Dolar"),
-                    # ('XPDUSD',"Paladyum Spot/Dolar"),
-                    # ('PLATIN',"Platin/Dolar"), 
-                    # ('PALADYUM',"Paladyum/Dolar"),
-                    # ('KWDUSD',"Kuveyt Dinarı/Dolar"),
-                    # ('AEDUSD',"Birleşik Arap Emirlikleri Dirhemi/Dolar"),
-                    # ('AUDUSD',"Avustralya Doları/Dolar"), 
         for altin, aciklama in altin_tip:
             myAltin = data[altin]
             myHasAltin = self.getHasAltinFromJson(myAltin, aciklama)
@@ -249,6 +174,22 @@ class AltinTracker:
                 "tarih" : dateObj.timestamp()
             })
         return gunler_arası_en_dusuk,gunler_arası_en_yuksek,gunler_list
+    
+    def getBaslangicWithCode(self, code: str):
+        try:
+            allTarih = baslangic_tarihi[code]
+            return allTarih.split(" ")[0]
+        except KeyError:
+            return None
+
+    
+    def getAllAlisSatisWtihCode(self, code:str):
+        baslangic = self.getBaslangicWithCode(code)
+        bitis = get_last_date()
+        en_dusuk, en_yuksek, data  = self.getAlisSatisWithCodeDateByGun(code,baslangic,bitis)
+        return  en_dusuk, en_yuksek, data, baslangic, bitis
+
+        
     
     def setTracker(self):
         while True:

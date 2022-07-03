@@ -10,7 +10,7 @@ class HasAltin:
                  satis_dir : int = 0,
                  dusuk : float = None,
                  yuksek : float = None,
-                 kapanis : float = None
+                 kapanis : float = None,
                  ):
         self.__id = id
         self.__code = code
@@ -46,6 +46,8 @@ class HasAltin:
         return self.__yuksek
     def getKapanis(self):
         return self.__kapanis
+    def getBaslangicTarihi(self):
+        return self.__baslangicTarihi
     
     def setID(self, id : int) -> None:
         self.__id = id

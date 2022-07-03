@@ -10,3 +10,5 @@ def get_time_command():
 def get_time_from_unix(unix_time : str):
     return dt.fromtimestamp(unix_time).strftime("%d/%m/%Y %H:%M:%S")
 
+def get_last_date():
+    return dt.now().strftime("%Y-%m-%d")

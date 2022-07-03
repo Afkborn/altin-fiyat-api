@@ -152,7 +152,8 @@ class Database():
                                 satis_dir=hasAltin.getSatisDir(),
                                 dusuk=hasAltin.getDusuk(),
                                 yuksek=hasAltin.getYuksek(),
-                                kapanis=hasAltin.getKapanis())
+                                kapanis=hasAltin.getKapanis(),
+                                )
             return dbHasAltin.getID()
         KEY = f"code, alis, satis, tarih, aciklama, alis_dir, satis_dir, dusuk, yuksek, kapanis"
         VALUES = f"""
@@ -222,7 +223,7 @@ class Database():
                                                 satis_dir = {satis_dir},
                                                 dusuk = {dusuk},
                                                 yuksek = {yuksek},
-                                                kapanis = {kapanis} 
+                                                kapanis = {kapanis}
                             WHERE id = {hasAltinID};""")
         self.db.commit()
         self.db.close()
