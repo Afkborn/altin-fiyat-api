@@ -81,10 +81,12 @@ class HasAltinRecipe(Resource):
             allData = data["all"]
             if (allData == 1 or allData == "1"):
                 allData = True
+            else:
+                allData = False
         except:
             allData = False
         if (allData):
-            en_dusuk, en_yuksek, data, t1, t2 = self.tracker.getAllAlisSatisWtihCode(code)
+            en_dusuk, en_yuksek, data, t1, t2 = self.tracker.getAllAlisSatisWithCode_fromDB(code)
         else:
             try:
                 t1 = data["t1"]

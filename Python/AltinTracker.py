@@ -140,6 +140,7 @@ class AltinTracker:
         
     
     def getAlisSatisWithCodeDateByGun(self, code : str, baslangic:str, bitis:str):
+        
         PAGE_HASALTIN_HISTORY = "https://haremaltin.com/ajax/cur/history"
         DATA_HASALTIN = {f"kod" : {code}, 
                         "tarih1" : {baslangic},  #"2012-09-10"
@@ -160,17 +161,18 @@ class AltinTracker:
         gunler_list = []
         data = responseJson["data"]
         meta = responseJson["meta"]
-        gunler_arası_en_yuksek = meta["yuksek"]
-        gunler_arası_en_dusuk = meta["dusuk"]
+        gunler_arası_en_yuksek = float(meta["yuksek"])
+        gunler_arası_en_dusuk = float(meta["dusuk"])
         for gun in data:
             alis = gun["alis"]
             satis = gun["satis"]
             kayit_tarihi = gun["kayit_tarihi"]
             #'2012-09-10 23:29:32' does not match format '%d-%m-%Y %H:%M:%S'
             dateObj = datetime.datetime.strptime(kayit_tarihi, '%Y-%m-%d %H:%M:%S') 
+            # self.db.addHasAltinFiyat(hasAltinID=hasAltin.getID(), hasAltinAlis=alis, hasAltinSatis=satis, hasAltinTarih=dateObj.timestamp())
             gunler_list.append({
-                "alis" : alis,
-                "satis" : satis,
+                "alis" : float(alis),
+                "satis" : float(satis),
                 "tarih" : dateObj.timestamp()
             })
         return gunler_arası_en_dusuk,gunler_arası_en_yuksek,gunler_list
@@ -183,7 +185,16 @@ class AltinTracker:
             return None
 
     
-    def getAllAlisSatisWtihCode(self, code:str):
+    def getAllAlisSatisWithCode_fromDB(self, code:str):
+        hasAltin = self.db.getHasAltin(code=code)
+        baslangic = self.db.getBaslangicTarihHasAltinFiyat_withID(hasAltinID=hasAltin.getID())
+        bitis = self.db.getBitisTarihHasAltinFiyat_withID(hasAltinID=hasAltin.getID())
+        baslangic = get_time_from_unix(baslangic)
+        bitis = get_time_from_unix(bitis)
+        gunler_arası_en_dusuk,gunler_arası_en_yuksek,gunler_list = self.db.getAllHasAltinFiyat_withID(hasAltinID=hasAltin.getID())        
+        return gunler_arası_en_dusuk,gunler_arası_en_yuksek,gunler_list, baslangic,bitis
+
+    def getAllAlisSatisWithCode_fromWeb(self, code : str):
         baslangic = self.getBaslangicWithCode(code)
         bitis = get_last_date()
         en_dusuk, en_yuksek, data  = self.getAlisSatisWithCodeDateByGun(code,baslangic,bitis)

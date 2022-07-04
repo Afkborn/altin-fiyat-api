@@ -204,13 +204,16 @@ class Database():
     
     def getLastHasAltinFiyat(self, hasAltinID:int):
         self.openDB()
-        self.im.execute(f"SELECT * FROM hasAltinFiyat WHERE hasAltinID = {hasAltinID} ORDER BY tarih DESC")
-        result = self.im.fetchone()
-        if result == None:
-            return None, None,None,None
-        hasAltinID, alis, satis, tarih = result
-        self.db.close()
-        return hasAltinID, alis,satis,tarih
+        try:
+            self.im.execute(f"SELECT * FROM hasAltinFiyat WHERE hasAltinID = {hasAltinID} ORDER BY tarih DESC")
+            result = self.im.fetchone()
+            if result == None:
+                return None, None,None,None
+            hasAltinID, alis, satis, tarih = result
+            self.db.close()
+            return hasAltinID, alis,satis,tarih
+        except:
+            return None, None, None, None
         
     
     def updateHasAltin(self, hasAltinID:int, hasAltinAlis:float, hasAltinSatis:float, hasAltinTarih:float, aciklama:str, alis_dir : int, satis_dir : int, dusuk : float, yuksek : float, kapanis : float):
@@ -236,4 +239,57 @@ class Database():
             id, code, alis, satis, tarih, aciklama, alis_dir, satis_dir, dusuk, yuksek, kapanis = hasAltin
             hasAltinlar.append(HasAltin(id, code, alis, satis, tarih, aciklama,alis_dir,satis_dir, dusuk, yuksek, kapanis))
         return hasAltinlar
+    
+    def getLowestSatisHasAltinFiyat_withID(self, hasAltinID:int):
+        self.openDB()
+        self.im.execute(f"SELECT satis FROM hasAltinFiyat WHERE hasAltinID = {hasAltinID} ORDER BY satis ASC LIMIT 1")
+        result = self.im.fetchone()
+        if result == None:
+            return None
+        return result[0]
+        
+    def getHighestSatisHasAltinFiyat_withID(self, hasAltinID:int):
+        self.openDB()
+        self.im.execute(f"SELECT satis FROM hasAltinFiyat WHERE hasAltinID = {hasAltinID} ORDER BY satis DESC LIMIT 1")
+        result = self.im.fetchone()
+        if result == None:
+            return None
+        return result[0]
+    
+    def getBaslangicTarihHasAltinFiyat_withID(self, hasAltinID:int):
+        self.openDB()
+        self.im.execute(f"SELECT tarih FROM hasAltinFiyat WHERE hasAltinID = {hasAltinID} ORDER BY tarih ASC LIMIT 1")
+        result = self.im.fetchone()
+        if result == None:
+            return None
+        return result[0]
+    
+    def getBitisTarihHasAltinFiyat_withID(self,hasAltinID:int):
+        self.openDB()
+        self.im.execute(f"SELECT tarih FROM hasAltinFiyat WHERE hasAltinID = {hasAltinID} ORDER BY satis DESC LIMIT 1")
+        result = self.im.fetchone()
+        if result == None:
+            return None
+        return result[0]
+    
+    def getAllHasAltinFiyat_withID(self, hasAltinID:int):
+        self.openDB()
+        gunler_list = []
+        self.im.execute(f"SELECT * FROM hasAltinFiyat WHERE hasAltinID = {hasAltinID} ORDER BY tarih DESC")
+        result = self.im.fetchall()
+        if result == None:
+            return None, None,None,None
+        gunler_arası_en_yuksek = self.getHighestSatisHasAltinFiyat_withID(hasAltinID)
+        gunler_arası_en_dusuk = self.getLowestSatisHasAltinFiyat_withID(hasAltinID)
+        for gun in result:
+            _, alis, satis, tarih = gun
+            gunler_list.append({
+                "alis" : alis,
+                "satis" : satis,
+                "tarih" : tarih
+            })
+        self.db.close()
+        return gunler_arası_en_dusuk,gunler_arası_en_yuksek,gunler_list
+
+
     
