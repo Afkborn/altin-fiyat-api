@@ -237,7 +237,8 @@ class Database():
         hasAltinlar = []
         for hasAltin in self.im.fetchall():
             id, code, alis, satis, tarih, aciklama, alis_dir, satis_dir, dusuk, yuksek, kapanis = hasAltin
-            hasAltinlar.append(HasAltin(id, code, alis, satis, tarih, aciklama,alis_dir,satis_dir, dusuk, yuksek, kapanis))
+            myHasAltin = HasAltin(id, code, alis, satis, tarih, aciklama,alis_dir,satis_dir, dusuk, yuksek, kapanis)
+            hasAltinlar.append(myHasAltin)
         return hasAltinlar
     
     def getLowestSatisHasAltinFiyat_withID(self, hasAltinID:int):
@@ -275,7 +276,7 @@ class Database():
     def getAllHasAltinFiyat_withID(self, hasAltinID:int):
         self.openDB()
         gunler_list = []
-        self.im.execute(f"SELECT * FROM hasAltinFiyat WHERE hasAltinID = {hasAltinID} ORDER BY tarih DESC")
+        self.im.execute(f"SELECT * FROM hasAltinFiyat WHERE hasAltinID = {hasAltinID} ORDER BY tarih ASC")
         result = self.im.fetchall()
         if result == None:
             return None, None,None,None
