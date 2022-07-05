@@ -5,23 +5,7 @@ from http import HTTPStatus
 from ..Database import Database
 from ..AltinTracker import AltinTracker
 
-
-class AltinKaynaklarRecipe(Resource):
-    db = Database()
-    def get(self):
-        altinList = self.db.getAltinlar()
-        dictAltinList = []
-        for altin in altinList:
-            dictAltinList.append(dict(altin))
-        if (len(dictAltinList) == 0):
-            return {
-                "status": HTTPStatus.NOT_FOUND,
-                'message': 'Değerli bulunamadı'}
-        
-        return {
-            "status": HTTPStatus.OK,
-            'data': dictAltinList}
-        
+    
 class HasAltinlarRecipe(Resource):
     db = Database()
     def get(self):
@@ -52,6 +36,7 @@ class HasAltinlarRecipe(Resource):
 class HasAltinRecipe(Resource):
     db = Database()
     tracker = AltinTracker()
+    gecmisZamanliVeri = tracker.getAllAlisSatis()
     def get(self,code):
         dictAltin = []
         hasAltin = self.db.getHasAltin(code=code)
@@ -86,7 +71,10 @@ class HasAltinRecipe(Resource):
         except:
             allData = False
         if (allData):
-            en_dusuk, en_yuksek, data, t1, t2 = self.tracker.getAllAlisSatisWithCode_fromDB(code)
+            # en_dusuk, en_yuksek, data, t1, t2, code = self.tracker.getAllAlisSatisWithCode_fromDB(code)
+            for index, (*_, dataCode) in enumerate(self.gecmisZamanliVeri):
+                if (code == dataCode):
+                    en_dusuk, en_yuksek, data, t1, t2, code = self.gecmisZamanliVeri[index]
         else:
             try:
                 t1 = data["t1"]
