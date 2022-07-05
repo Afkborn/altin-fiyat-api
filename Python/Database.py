@@ -71,7 +71,7 @@ class Database():
         self.db.close()
     
     def openDB(self):
-        self.db = sql.connect(self.dbLoc)
+        self.db = sql.connect(self.dbLoc,check_same_thread=False)
         self.im = self.db.cursor()
     
     def addAltin(self, altin : Altin) -> None:
