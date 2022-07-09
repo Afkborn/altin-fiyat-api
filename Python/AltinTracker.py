@@ -1,6 +1,5 @@
-from playwright.sync_api import sync_playwright
-from time import sleep, time
 
+from time import sleep, time
 from Python.globalVar import *
 from Python.Model.HasAltin import HasAltin
 from Python.Database import Database
