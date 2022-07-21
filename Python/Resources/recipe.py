@@ -98,4 +98,8 @@ class HasAltinRecipe(Resource):
             "alis_satis_gunler" : data
         }
         
-        
+class Status(Resource):
+    def get(self):
+        return {
+            "status": HTTPStatus.OK
+        }
